@@ -1,11 +1,11 @@
 package com.example.secure.service;
 
-
 import com.example.secure.entity.Role;
 import com.example.secure.entity.User;
 import com.example.secure.repository.RoleRepository;
 import com.example.secure.repository.UserRepository;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -82,5 +82,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User getPrincipal() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username =  userDetails.getUsername();
+        return userRepository.findByUsername(username);
     }
 }

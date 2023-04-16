@@ -1,4 +1,4 @@
-//=================================   Edit   =====================================================
+//================================= get data from form Edit   =====================================================
     function openEditModal(id) {
         let modalEdit = document.getElementById("modalEditWindow");
         modalEdit.style.display = "block";
@@ -20,7 +20,7 @@
 
     }
 
-//edit user=======================================================================================
+//================================edit user after pushing button ==================================================
     const editUserButton = document.getElementById('editUserButton');
 
     editUserButton.addEventListener('click', () => {
@@ -30,33 +30,44 @@
         let userPass = document.getElementById("editModalPass").value;
         let userRole = document.getElementById("editModalRole").value;
 
-        if (userRole == "") {
-            userRole = "ROLE_USER"
+        if (userRole == "" || userRole == null) {
+            userRole = "ROLE_USER";
         }
-
-        fetch(`http://localhost:8089/api/users/`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache, no-store, must-revalidate'
-            },
-            body: JSON.stringify({
-                id: userId,
-                name: userName,
-                lastName: userLastName,
-                password: userPass,
-                role: userRole
-            })
-        }).then(response => {
-            if (response.ok) {
-                console.log('Пользователь изменен');
-            } else {
-                console.error('Ошибка изменения пользователя');
+        class User {
+            constructor(userName, userLastName, userPass) {
+                this.userName = userName;
+                this.userLastName = userLastName;
+                this.userPass = userPass;
             }
-        }).catch(error => {
-            console.error('Ошибка изменения пользователя: ', error);
-        })
-        alert("Пользователь изменен")
-    });
+
+            update() {
+                fetch(`http://localhost:8089/api/users/?id=${userId}&roles=${userRole}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate'
+                    },
+                    body: JSON.stringify({
+                        username: this.userName,
+                        lastName: this.userLastName,
+                        password: this.userPass,
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        console.log('Пользователь изменен');
+                    } else {
+                        console.error('Ошибка изменения пользователя');
+                    }
+                }).catch(error => {
+                    console.error('Ошибка изменения пользователя: ', error);
+                })
+                alert("Пользователь изменен")
+            }
+        }
+        const user = new User(userName, userLastName, userPass);
+        user.update();
+
+});
+
 
 

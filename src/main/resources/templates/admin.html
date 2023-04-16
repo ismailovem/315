@@ -9,9 +9,9 @@
 <body>
 <!--======================  header ================================================-->
 <div class="header" style="background-color: darkslategrey; color: lightgray ; padding:1%;">
-    <span th:object="${adminUser}"><b th:text="${adminUser.getUsername()}"></b></span>
+    <span id="principalName"></span>
     <span>with roles: </span>
-    <span th:text="${adminUser.roleToString}"></span>
+    <span id="principalRole"></span>
     <span style="float:right; color:lightgray"><a style="color:lightgray" th:href="logout">Logout</a></span>
 </div>
 <!--===============================================================================-->
@@ -215,6 +215,7 @@
 </div> <!--========== div container ======================================-->
 
 
+<script src="static/principal.js" th:src="@{/principal.js}" type="text/javascript"></script>
 <script src="static/editUser.js" th:src="@{/editUser.js}" type="text/javascript"></script>
 <script src="static/delUser.js" th:src="@{/delUser.js}" type="text/javascript"></script>
 <script src="static/newUser.js" th:src="@{/newUser.js}" type="text/javascript"></script>
