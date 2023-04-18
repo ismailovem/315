@@ -10,9 +10,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value="/api",produces = "application/json; charset=UTF-8")
-public class AdminRESTController {
+public class RESTController {
     private final UserService serv;
-    public AdminRESTController(UserService serv) {
+    public RESTController(UserService serv) {
         this.serv = serv;
     }
     @GetMapping("/users")
@@ -21,6 +21,10 @@ public class AdminRESTController {
     }
     @GetMapping("/admin")
     public User getUserForAdminPage() {
+        return serv.getPrincipal();
+    }
+    @GetMapping("/user")
+    public User getUserForUserPage() {
         return serv.getPrincipal();
     }
     @DeleteMapping(value = "/users/{id}")
