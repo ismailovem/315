@@ -14,12 +14,17 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private List<User> users;
     public Role() { }
+
     public String getRoleName() {
         return role;
     }
     @Override
     public String getAuthority() {
         return getRoleName();
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

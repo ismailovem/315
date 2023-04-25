@@ -84,7 +84,7 @@
                                      <tr><td align="center"><label for="newUserFormRole"><b>role</b></label></td></tr>
                                      <tr>
                                          <td>
-                                             <select  class="form-control" id="newUserFormRole" name="role" >
+                                             <select multiple class="form-control" id="newUserFormRole" name="role" >
                                                 <option th:value= "'ROLE_USER'" th:text="USER" selected="selected"></option>
                                                 <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
                                             </select>
@@ -189,10 +189,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editModalRole" class="col-form-label">Role:</label>
-                                   <!-- <label for="editModalRole">role</label>-->
-                                    <select  class="form-control" id="editModalRole" name="editRole">
-                                        <option th:value= "'ROLE_USER'" th:text="USER" selected></option>
-                                        <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+                                    <select multiple class="form-control" id="editModalRole" name="editRole">
+                                        <option th:value= "'ROLE_USER'" th:text="USER" th:selected="true" > </option>
+                                        <option th:value="'ROLE_ADMIN'" th:text="ADMIN"> </option>
                                     </select>
                                 </div>
                             </div> <!-- modal-body-->

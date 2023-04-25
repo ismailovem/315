@@ -28,11 +28,13 @@
         let userName = document.getElementById("editModalName").value;
         let userLastName = document.getElementById("editModalLastName").value;
         let userPass = document.getElementById("editModalPass").value;
-        let userRole = document.getElementById("editModalRole").value;
-
-        if (userRole == "" || userRole == null) {
-            userRole = "ROLE_USER";
+        //let userRole = document.getElementById("editModalRole").value;
+        let roles = [];
+        let select = document.getElementById("editModalRole");
+        for (let option of select.selectedOptions) {
+            roles.push(option.value);
         }
+
         class User {
             constructor(userName, userLastName, userPass) {
                 this.userName = userName;
@@ -41,7 +43,7 @@
             }
 
             update() {
-                fetch(`http://localhost:8089/api/users/?id=${userId}&roles=${userRole}`, {
+                fetch(`http://localhost:8089/api/users/?id=${userId}&roles=${roles}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',

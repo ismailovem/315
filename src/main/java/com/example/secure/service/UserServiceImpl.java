@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
-import java.util.stream.Stream;
+
 
 
 @Service
@@ -38,11 +38,17 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    public void saveUser(User user,String role) {
+    public void saveUser(User user,String[] roles) {
+        if( user.getPassword() == "" ) {
+            user.setPassword(user.getUsername());
+        }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setEnabled(true);
-        List<Role> list = Stream.of(roleRepository.findByRole(role.trim())).toList();
-        user.setRoles(list);
+        List<Role> saveList = new ArrayList<>();
+        for (String r : roles) {
+            saveList.add(roleRepository.findByRole(r.trim()));
+        }
+        user.setRoles(saveList);
         userRepository.save(user);
     }
     @Transactional
@@ -53,27 +59,25 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(User user, Long id,String role) {
+    public void update(User user, Long id,String[] roles) {
         User forUpdateUser = findById(id);
         forUpdateUser.setUsername(user.getUsername());
         forUpdateUser.setLastName(user.getLastName());
+        if (user.getPassword() == "") {
+            user.setPassword(user.getUsername());
+        }
         forUpdateUser.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         forUpdateUser.setEnabled(true);
-        List<Role> list = Stream.of(roleRepository.findByRole(role.trim())).toList();
-        user.setRoles(list);
+        List<Role> updateList = new ArrayList<>();
+        if ( roles.length < 1 ) {
+            roles = Arrays.copyOf(roles, roles.length + 1);
+            roles[roles.length - 1] = "ROLE_USER";
+        }
+        for (String r : roles) {
+                updateList.add(roleRepository.findByRole(r.trim()));
+        }
+        user.setRoles(updateList);
         forUpdateUser.setRoles(user.getRoles());
-    }
-    @Transactional
-    @Override
-    public User edit(Long id, String name,String lastName, String password, String role) {
-        User forUpdateUser = findById(id);
-        forUpdateUser.setUsername(name);
-        forUpdateUser.setLastName(lastName);
-        forUpdateUser.setPassword(new BCryptPasswordEncoder().encode(password));
-        forUpdateUser.setEnabled(true);
-        List<Role> list = Stream.of(roleRepository.findByRole(role.trim())).toList();
-        forUpdateUser.setRoles(list);
-        return forUpdateUser;
     }
     @Override
     public User findById(Long id) {
@@ -83,7 +87,6 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
     @Override
     public User getPrincipal() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

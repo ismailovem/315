@@ -36,13 +36,13 @@ public class RESTController {
         return serv.findById(id);
     }
     @PatchMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam(name = "id") Long id, @RequestParam(name = "roles") String roles) {
+    public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam(name = "id") Long id, @RequestParam(name = "roles") String[] roles) {
        serv.update(user,id,roles);
        return ResponseEntity.ok(user);
     }
     @PostMapping("/users")
-    public ResponseEntity <String> createUser(@RequestBody User user, @RequestParam(name = "role") String role) {
-        serv.saveUser(user,role);
+    public ResponseEntity <String> createUser(@RequestBody User user, @RequestParam(name = "roles") String[] roles) {
+        serv.saveUser(user,roles);
         return ResponseEntity.ok("ok");
     }
 }
